@@ -25,20 +25,21 @@ The client automatically increments (and wraps around if necessary) the sequence
 
 The client provides two methods:
 
-* ```createPacket()```: creates a new E1.31 (sACN) packet to be used for sending.
-* ```send()```: sends a E1.31 (sACN) packet to the remote host or multicast group.
+* ```createPacket(numChannels)```: creates a new E1.31 (sACN) packet to be used for sending.
+* ```send(packet)```: sends a E1.31 (sACN) packet to the remote host or multicast group.
 
 Full code example for the Client class:
 
 ```javascript
 var e131 = require('./index');
 
-var client = new e131.Client('192.168.1.12');
+var client = new e131.Client('192.168.1.12');  // or use a universe
 var packet = client.createPacket(264);
 var channelData = packet.getChannelData();
+packet.setSourceName('test E1.31 client');
 packet.setUniverse(0x01);
 
-// you can modify channelData directly, is a Buffer view
+// channelData is a Buffer view, you can use it directly
 var color = 0;
 function cycleColor() {
   for (var idx=0; idx<channelData.length; idx++) {
@@ -101,11 +102,11 @@ The E1.31 Packet class contains a number of useful setter methods:
 
 * ```setCID()```: sets the CID field into the root layer.
 * ```setSourceName()```: sets source name field into the frame layer.
-* ```setPriority```: sets the priority field into the frame layer.
-* ```setSequenceNumber```: sets the sequence number into the frame layer.
-* ```setOptions```: sets the options into the frame layer.
-* ```setUniverse```: sets the DMX universe into the frame layer.
-* ```setChannelData```: sets the DMX channel data into the DMP layer.
+* ```setPriority()```: sets the priority field into the frame layer.
+* ```setSequenceNumber()```: sets the sequence number into the frame layer.
+* ```setOptions()```: sets the options into the frame layer.
+* ```setUniverse()```: sets the DMX universe into the frame layer.
+* ```setChannelData()```: sets the DMX channel data into the DMP layer.
 
 Also the following getter methods are provided:
 
