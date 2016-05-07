@@ -32,9 +32,9 @@ The server supports the following events that you can listen to:
 * ```listening```: fires as soon as the server starts listening.
 * ```close```: fires when the server is closed.
 * ```error```: fires when an error occurs within the server.
-* ```packet``` <packet>: fires when a valid E1.31 (sACN) packet is received.
-* ```packet-out-of-order``` <packet>: fires when an out-of-order packet is received.
-* ```packet-error``` <packet, err>: fires when an invalid packet is received.
+* ```packet```: (packet) fires when a valid E1.31 (sACN) packet is received.
+* ```packet-out-of-order```: (packet) fires when an out-of-order packet is received.
+* ```packet-error```: (packet, err) fires when an invalid packet is received.
 
 Full code example for the Server class:
 
