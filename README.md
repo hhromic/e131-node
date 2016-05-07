@@ -12,7 +12,14 @@ $ npm install e131
 
 ## Client Class
 
-[TODO]
+The Client class implements a UDP client for sending E1.31 (sACN) traffic. The class constructor is as follows:
+
+```javascript
+var e131 = require('e131');
+var client = new e131.Client([universe], [host], [port]);
+```
+
+If ```universe``` is omitted, a value of ```1``` is assumed. If ```host``` is omitted, the E1.31 (sACN) Multicast group associated to the universe is used. If ```port``` is omitted, the default E1.31 port ```5568``` is used.
 
 ## Server Class
 
