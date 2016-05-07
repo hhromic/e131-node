@@ -16,10 +16,41 @@ The Client class implements a UDP client for sending E1.31 (sACN) traffic. The c
 
 ```javascript
 var e131 = require('e131');
-var client = new e131.Client([universe], [host], [port]);
+var client = new e131.Client(arg, [port]);
 ```
 
-If ```universe``` is omitted, a value of ```1``` is assumed. If ```host``` is omitted, the E1.31 (sACN) Multicast group associated to the universe is used. If ```port``` is omitted, the default E1.31 port ```5568``` is used.
+The first argument can be a host address, name or universe number. If ```port``` is omitted, the default E1.31 port ```5568``` is used.
+If a universe is given, the client will automatically join the relevant Multicast group.
+The client automatically increments (and wraps around if necessary) the sequence number of the transmitted packet.
+
+The client provides two methods:
+
+* ```createPacket()```: creates a new E1.31 (sACN) packet to be used for sending.
+* ```send()```: sends a E1.31 (sACN) packet to the remote host or multicast group.
+
+Full code example for the Client class:
+
+```javascript
+var e131 = require('./index');
+
+var client = new e131.Client('192.168.1.12');
+var packet = client.createPacket(264);
+var channelData = packet.getChannelData();
+packet.setUniverse(0x01);
+
+// you can modify channelData directly, is a Buffer view
+var color = 0;
+function cycleColor() {
+  for (var idx=0; idx<channelData.length; idx++) {
+    channelData[idx] = color % 0xff;
+    color = color + 90;
+  }
+  client.send(packet, function () {
+    setTimeout(cycleColor, 125);
+  });
+}
+cycleColor();
+```
 
 ## Server Class
 
@@ -66,14 +97,24 @@ server.on('packet', function (packet) {
 
 ## E1.31 (sACN) Packet Class
 
-The E1.31 Packet class contains a number of useful getter methods:
+The E1.31 Packet class contains a number of useful setter methods:
+
+* ```setCID()```: sets the CID field into the root layer.
+* ```setSourceName()```: sets source name field into the frame layer.
+* ```setPriority```: sets the priority field into the frame layer.
+* ```setSequenceNumber```: sets the sequence number into the frame layer.
+* ```setOptions```: sets the options into the frame layer.
+* ```setUniverse```: sets the DMX universe into the frame layer.
+* ```setChannelData```: sets the DMX channel data into the DMP layer.
+
+Also the following getter methods are provided:
 
 * ```getCID()```: gets the CID field from the root layer.
 * ```getSourceName()```: gets the source name field from the frame layer.
 * ```getPriority()```: gets the priority field from the frame layer.
 * ```getSequenceNumber()```: gets the sequence number from the frame layer.
 * ```getOptions()```: gets the options from the frame layer.
-* ```getUniverse()```: gets the universe from the frame layer.
+* ```getUniverse()```: gets the DMX universe from the frame layer.
 * ```getChannelData()```: gets the DMX channel data from the DMP layer.
 
 If a packet fails validation, the following errors can be returned:
