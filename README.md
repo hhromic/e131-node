@@ -31,7 +31,7 @@ The client provides two methods:
 Full code example for the Client class:
 
 ```javascript
-var e131 = require('./index');
+var e131 = require('e131');
 
 var client = new e131.Client('192.168.1.12');  // or use a universe
 var packet = client.createPacket(264);
