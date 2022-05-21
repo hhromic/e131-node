@@ -13,7 +13,14 @@ jobs:
           node-version: 16
       - run: npm install
       - uses: JS-DevTools/npm-publish@v1
+        name: "Publish to Github Packages"
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           registry: "https://npm.pkg.github.com"
-          greater-version-only: true
+          check-version: true
+      - uses: JS-DevTools/npm-publish@v1
+        name: "Publish to NPM"
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          registry: "https://registry.npmjs.org"
+          check-version: true
