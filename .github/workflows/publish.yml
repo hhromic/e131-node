@@ -18,9 +18,11 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           registry: "https://npm.pkg.github.com"
           check-version: true
+          access: "public"
       - uses: JS-DevTools/npm-publish@v1
         name: "Publish to NPM"
         with:
           token: ${{ secrets.NPM_TOKEN }}
           registry: "https://registry.npmjs.org"
           check-version: true
+          access: "public"
