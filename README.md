@@ -8,7 +8,7 @@ A Node.js module that provides simple client and server objects for communicatin
 
 To install, use `npm`:
 
-    $ npm install e131
+    $ npm install @paradise-pi/e131
 
 ## Client Class
 
