@@ -1,5 +1,5 @@
 {
-  "name": "e131",
+  "name": "@paradise-pi/e131",
   "version": "1.1.3",
   "description": "Node.js client/server library for the E1.31 (sACN) protocol",
   "main": "index.js",
@@ -8,18 +8,33 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/hhromic/e131-node.git"
+    "url": "https://github.com/paradise-pi/e131-node.git"
   },
   "keywords": [
     "e131",
     "sacn",
-    "client",
-    "server"
+    "lighting"
   ],
-  "author": "Hugo Hromic",
+  "contributors": [
+    {
+      "name" : "Hugo Hromic",
+      "email" : "hhromic@users.noreply.github.com",
+      "url" : "https://github.com/hhromic"
+    },
+    {
+      "name" : "John Cherry",
+      "email" : "cherry-john@users.noreply.github.com",
+      "url" : "https://github.com/cherry-john"
+    },
+    {
+      "name" : "James Bithell",
+      "email" : "jbithell@users.noreply.github.com",
+      "url" : "https://github.com/jbithell"
+    }
+  ],
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/hhromic/e131-node/issues"
+    "url": "https://github.com/paradise-pi/e131-node/issues"
   },
-  "homepage": "https://github.com/hhromic/e131-node"
+  "homepage": "https://github.com/paradise-pi/e131-node"
 }
