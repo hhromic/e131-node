@@ -23,26 +23,22 @@
 var dgram = require('dgram');
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
-var e131 = require('./e131');
+var e131 = require('./utils');
 
 // E1.31 server object constructor
-function Server(universes, port) {
+function Server(this: any, universes?: { universes?: Array<number>, universe?: number, port?: number, ip?: string }, port?: number) {
   if (this instanceof Server === false) {
-    return new Server(port);
+    return new (Server as any)(port);
   }
   EventEmitter.call(this);
 
-  if (Object.prototype.toString.call(universes) === '[object Object]') {
+  if (typeof universes === 'object' && universes !== null) {
     var options = universes;
     this.universes = options.universes || [options.universe] || [0x01];
     this.port = options.port || e131.DEFAULT_PORT;
     this.ip = options.ip;
   } else {
-    if (universes !== undefined && !Array.isArray(universes)) {
-      universes = [universes];
-    }
-
-    this.universes = universes || [0x01];
+    this.universes = universes !== undefined && !Array.isArray(universes) ? [universes] : universes || [0x01];
     this.port = port || e131.DEFAULT_PORT;
   }
   
@@ -50,10 +46,10 @@ function Server(universes, port) {
   this._lastSequenceNumber = {};
 
   var self = this;
-  this.universes.forEach(function (universe) {
+  this.universes.forEach(function (universe: string | number) {
     self._lastSequenceNumber[universe] = 0;
   });
-  this._socket.on('error', function onError(err) {
+  this._socket.on('error', function onError(err: any) {
     self.emit('error', err);
   });
   this._socket.on('listening', function onListening() {
@@ -62,7 +58,7 @@ function Server(universes, port) {
   this._socket.on('close', function onClose() {
     self.emit('close');
   });
-  this._socket.on('message', function onMessage(msg) {
+  this._socket.on('message', function onMessage(msg: any) {
     var packet = new e131.Packet(msg);
     var validation = packet.validate();
     if (validation !== packet.ERR_NONE) {
@@ -77,7 +73,7 @@ function Server(universes, port) {
     self._lastSequenceNumber[packet.getUniverse()] = packet.getSequenceNumber();
   });
   this._socket.bind(this.port, function onListening() {
-    self.universes.forEach(function (universe) {
+    self.universes.forEach(function (this: any, universe: any) {
       var multicastGroup = e131.getMulticastGroup(universe);
       
       if (this.ip) {
@@ -98,4 +94,4 @@ Server.prototype.close = function close() {
 util.inherits(Server, EventEmitter);
 
 // module exports
-module.exports = Server;
+export { Server };

@@ -1,19 +1,21 @@
 {
   "name": "@paradise-pi/e131",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Node.js client/server library for the E1.31 (sACN) protocol",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "prepare" : "npm run build",
-    "build" : "tsc",
+    "prepare": "npm run build",
+    "build": "tsc",
     "test": "echo \"Error: tests coming soon\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/paradise-pi/e131-node.git"
   },
-  "files": ["lib/**/*"],
+  "files": [
+    "lib/**/*"
+  ],
   "keywords": [
     "e131",
     "sacn",
@@ -42,6 +44,7 @@
   },
   "homepage": "https://github.com/paradise-pi/e131-node",
   "devDependencies": {
+    "@types/node": "^18.0.0",
     "typescript": "^4.7.3"
   }
 }
