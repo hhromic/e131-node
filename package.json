@@ -2,14 +2,18 @@
   "name": "@paradise-pi/e131",
   "version": "1.2.1",
   "description": "Node.js client/server library for the E1.31 (sACN) protocol",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prepare" : "npm run build",
+    "build" : "tsc",
+    "test": "echo \"Error: tests coming soon\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/paradise-pi/e131-node.git"
   },
+  "files": ["lib/**/*"],
   "keywords": [
     "e131",
     "sacn",
@@ -17,24 +21,27 @@
   ],
   "contributors": [
     {
-      "name" : "Hugo Hromic",
-      "email" : "hhromic@users.noreply.github.com",
-      "url" : "https://github.com/hhromic"
+      "name": "Hugo Hromic",
+      "email": "hhromic@users.noreply.github.com",
+      "url": "https://github.com/hhromic"
     },
     {
-      "name" : "John Cherry",
-      "email" : "cherry-john@users.noreply.github.com",
-      "url" : "https://github.com/cherry-john"
+      "name": "John Cherry",
+      "email": "cherry-john@users.noreply.github.com",
+      "url": "https://github.com/cherry-john"
     },
     {
-      "name" : "James Bithell",
-      "email" : "jbithell@users.noreply.github.com",
-      "url" : "https://github.com/jbithell"
+      "name": "James Bithell",
+      "email": "jbithell@users.noreply.github.com",
+      "url": "https://github.com/jbithell"
     }
   ],
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/paradise-pi/e131-node/issues"
   },
-  "homepage": "https://github.com/paradise-pi/e131-node"
+  "homepage": "https://github.com/paradise-pi/e131-node",
+  "devDependencies": {
+    "typescript": "^4.7.3"
+  }
 }

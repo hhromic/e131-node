@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "declaration": true,
+    "allowJs": true,
+    "outDir": "lib",
+    "strict": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}
