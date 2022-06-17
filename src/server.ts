@@ -21,77 +21,76 @@
  */
 
 var dgram = require('dgram');
-var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 var e131 = require('./utils');
+var Packet = require('./e131/packet');
 
-// E1.31 server object constructor
-function Server(this: any, universes?: { universes?: Array<number>, universe?: number, port?: number, ip?: string }, port?: number) {
-  if (this instanceof Server === false) {
-    return new (Server as any)(port);
-  }
-  EventEmitter.call(this);
+export class Server extends EventEmitter{
 
-  if (typeof universes === 'object' && universes !== null) {
-    var options = universes;
-    this.universes = options.universes || [options.universe] || [0x01];
-    this.port = options.port || e131.DEFAULT_PORT;
-    this.ip = options.ip;
-  } else {
-    this.universes = universes !== undefined && !Array.isArray(universes) ? [universes] : universes || [0x01];
-    this.port = port || e131.DEFAULT_PORT;
-  }
-  
-  this._socket = dgram.createSocket('udp4');
-  this._lastSequenceNumber = {};
+  private universes: Array<number>
+  private port: number
+  private ip: string
+  private _socket: any
+  private _lastSequenceNumber: any
 
-  var self = this;
-  this.universes.forEach(function (universe: string | number) {
-    self._lastSequenceNumber[universe] = 0;
-  });
-  this._socket.on('error', function onError(err: any) {
-    self.emit('error', err);
-  });
-  this._socket.on('listening', function onListening() {
-    self.emit('listening');
-  });
-  this._socket.on('close', function onClose() {
-    self.emit('close');
-  });
-  this._socket.on('message', function onMessage(msg: any) {
-    var packet = new e131.Packet(msg);
-    var validation = packet.validate();
-    if (validation !== packet.ERR_NONE) {
-      self.emit('packet-error', packet, validation);
-      return;
-    }
-    if (packet.discard(self._lastSequenceNumber[packet.getUniverse()])) {
-      self.emit('packet-out-of-order', packet);
+  constructor (options: {universes?: Array<number>, universe?: number, port: number, ip?: string}) {
+    super()
+    if (options.universes) {
+      this.universes = options.universes
+    } else if (options.universe) {
+      this.universes = [options.universe]
     } else {
-      self.emit('packet', packet);
+      //default to universe 1
+      this.universes = [1]
     }
-    self._lastSequenceNumber[packet.getUniverse()] = packet.getSequenceNumber();
-  });
-  this._socket.bind(this.port, function onListening() {
-    self.universes.forEach(function (this: any, universe: any) {
-      var multicastGroup = e131.getMulticastGroup(universe);
-      
-      if (this.ip) {
-        self._socket.addMembership(multicastGroup, this.ip);
-      } else {
-        self._socket.addMembership(multicastGroup);
-      }
+    this.port = options.port || 5568
+    this.ip = options.ip || '127.0.0.1'
+
+    //create actual connection
+    this._socket = dgram.createSocket('udp4');
+    this._lastSequenceNumber = {};
+
+    this.setupServer()
+  }
+
+  private setupServer(){
+    var self = this;
+    this.universes.forEach(function (universe: string | number) {
+      self._lastSequenceNumber[universe] = 0;
     });
-  });
+    this._socket.on('error', function onError(err: any) {
+      self.emit('error', err);
+    });
+    this._socket.on('listening', function onListening() {
+      self.emit('listening');
+    });
+    this._socket.on('close', function onClose() {
+      self.emit('close');
+    });
+    this._socket.on('message', function onMessage(msg: any) {
+      var packet = new Packet(msg);
+      var validation = packet.validate();
+      if (validation !== packet.ERR_NONE) {
+        self.emit('packet-error', packet, validation);
+        return;
+      }
+      if (packet.discard(self._lastSequenceNumber[packet.getUniverse()])) {
+        self.emit('packet-out-of-order', packet);
+      } else {
+        self.emit('packet', packet);
+      }
+      self._lastSequenceNumber[packet.getUniverse()] = packet.getSequenceNumber();
+    });
+    this._socket.bind(this.port, function onListening() {
+      self.universes.forEach(function (this: any, universe: any) {
+        var multicastGroup = e131.getMulticastGroup(universe);
+        self._socket.addMembership(multicastGroup, self.ip);
+
+      });
+    });
+  }
+
+  public close() {
+    this._socket.close();
+  }
 }
-
-// close a listening E1.31 server
-Server.prototype.close = function close() {
-  this._socket.close();
-};
-
-// server object inherits from EventEmitter
-util.inherits(Server, EventEmitter);
-
-// module exports
-export { Server };
