@@ -26,25 +26,24 @@ var e131 = require('./utils');
 var Packet = require('./e131/packet');
 
 export class Server extends EventEmitter{
-
   private universes: Array<number>
   private port: number
   private ip: string
   private _socket: any
   private _lastSequenceNumber: any
 
-  constructor (options: {universes?: Array<number>, universe?: number, port: number, ip?: string}) {
+  constructor (universes?: Array<number>, universe?: number, port?: number, ip?: string) {
     super()
-    if (options.universes) {
-      this.universes = options.universes
-    } else if (options.universe) {
-      this.universes = [options.universe]
+    if (universes) {
+      this.universes = universes
+    } else if (universe) {
+      this.universes = [universe]
     } else {
       //default to universe 1
       this.universes = [1]
     }
-    this.port = options.port || 5568
-    this.ip = options.ip || '127.0.0.1'
+    this.port = port || 5568
+    this.ip = ip || '127.0.0.1'
 
     //create actual connection
     this._socket = dgram.createSocket('udp4');
@@ -92,5 +91,17 @@ export class Server extends EventEmitter{
 
   public close() {
     this._socket.close();
+  }
+
+  public getUniverses(): Array<number>{
+    return this.universes
+  }
+
+  public getPort(): number {
+    return this.port
+  }
+
+  public getIP(): string {
+    return this.ip
   }
 }
