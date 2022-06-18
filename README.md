@@ -16,7 +16,7 @@ The Client class implements a UDP client for sending E1.31 (sACN) traffic. The c
 
 ```javascript
 var e131 = require('e131');
-var client = new e131.Client(arg, [port]);
+var client = new e131.Client(host, [port]);
 ```
 
 The first argument can be a host address, name or universe number. If `port` is omitted, the default E1.31 port `5568` is used.
@@ -61,7 +61,7 @@ The Server class implements a UDP server for receiving E1.31 (sACN) traffic. The
 
 ```javascript
 var e131 = require('e131');
-var server = new e131.Server([universes], [port]);
+var server = new e131.Server([universes], [port], [ip]);
 ```
 
 The `universes` argument can be an array (for joining multiple universes) or a single integer for joining a single universe. If `universes` is omitted, a single value of `1` is assumed. If `port` is omitted, the default E1.31 port `5568` is used.
@@ -70,15 +70,14 @@ or
 
 ```javascript
 var e131 = require('e131');
-var server = new e131.Server({
+var server = new e131.Server(
   universes: [universes], // Multiple universes
-  // universe: universe, // Single universe
   port: 5568,
   ip: '192.168.1.12' // IP of the network interface
-});
+);
 ```
 
-All options are optional. Use either `universes` or `universe` but not both. The `ip` option is required when more than one network interface is present.
+All options are optional. The `ip` option is required when more than one network interface is present.
 
 The server will join the corresponding Multicast groups for each provided universe automatically and starts listening as soon as it is created.
 The server performs basic out-of-order detection on received packets. If an out-of-order packet is received, it is discarded.

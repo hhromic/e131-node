@@ -31,12 +31,10 @@ export class Server extends EventEmitter{
   private _socket: any
   private _lastSequenceNumber: any
 
-  constructor (universes?: Array<number>, universe?: number, port?: number, ip?: string) {
+  constructor (universes?: Array<number>, port?: number, ip?: string) {
     super()
     if (universes) {
       this.universes = universes
-    } else if (universe) {
-      this.universes = [universe]
     } else {
       //default to universe 1
       this.universes = [1]
