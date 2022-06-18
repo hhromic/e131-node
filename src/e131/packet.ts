@@ -33,7 +33,7 @@ export class Packet {
   public static readonly ERR_DMP_LAYER = 3;
 
   // E1.31 framing options
-  public Options = FrameLayer.Options;
+  readonly Options: {}
 
   // E1.31 packet default priority
   public static readonly DEFAULT_PRIORITY = FrameLayer.DEFAULT_PRIORITY;
@@ -64,6 +64,8 @@ export class Packet {
     this._rootLayer = new RootLayer(this._buffer.slice(0, 38));
     this._frameLayer = new FrameLayer(this._buffer.slice(38, 115));
     this._dmpLayer = new DMPLayer(this._buffer.slice(115));
+
+    this.Options = this._frameLayer.Options;
 
     if (typeof arg === "number") {
       this.init(arg);

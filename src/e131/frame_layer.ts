@@ -29,10 +29,7 @@ export class FrameLayer{
   private static readonly _VECTOR = 0x00000002;
   // frame layer public constants
   static readonly DEFAULT_PRIORITY = 0x64;
-  public static Options = {
-    TERMINATED: 6,
-    PREVIEW: 7,
-  };
+  readonly Options : {}
 
   private _buffer: Buffer;
   private flength!: number; 
@@ -45,6 +42,10 @@ export class FrameLayer{
   private universe!: number; 
 
   constructor(buffer: Buffer){
+    this.Options = {
+      TERMINATED: 6,
+      PREVIEW: 7,
+    }
     this._buffer = buffer;
     this.update();
   }
