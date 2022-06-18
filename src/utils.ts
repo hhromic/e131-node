@@ -20,20 +20,13 @@
  * limitations under the License.
  */
 
-var Packet = require('./e131/packet');
-
-// global E1.31 constants
-var DEFAULT_PORT = 5568;
-
-// compute the multicast group IP address for a universe
-function getMulticastGroup(universe) {
-  if (universe < 1 || universe > 63999) {
-    throw new RangeError('universe should be in the range [1-63999]');
+export class e131Utils {
+  // compute the multicast group IP address for a universe
+  public static getMulticastGroup(universe: number) {
+    if (universe < 1 || universe > 63999) {
+      throw new RangeError('universe should be in the range [1-63999]');
+    }
+    return '239.255.' + (universe >> 8) + '.' + (universe & 0xff);
   }
-  return '239.255.' + (universe >> 8) + '.' + (universe & 0xff);
 }
 
-// module exports
-module.exports.DEFAULT_PORT = DEFAULT_PORT;
-module.exports.Packet = Packet;
-module.exports.getMulticastGroup = getMulticastGroup;

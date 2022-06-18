@@ -19,11 +19,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-var dgram = require('dgram');
-var EventEmitter = require('events').EventEmitter;
-var e131 = require('./utils');
-var Packet = require('./e131/packet');
+import { Packet } from "./e131/packet"
+import { e131Utils } from "./utils";
+import { EventEmitter } from "stream";
+const dgram = require('dgram');
 
 export class Server extends EventEmitter{
   private universes: Array<number>
@@ -69,7 +68,7 @@ export class Server extends EventEmitter{
     this._socket.on('message', function onMessage(msg: any) {
       var packet = new Packet(msg);
       var validation = packet.validate();
-      if (validation !== packet.ERR_NONE) {
+      if (validation !== Packet.ERR_NONE) {
         self.emit('packet-error', packet, validation);
         return;
       }
@@ -82,7 +81,7 @@ export class Server extends EventEmitter{
     });
     this._socket.bind(this.port, function onListening() {
       self.universes.forEach(function (this: any, universe: any) {
-        var multicastGroup = e131.getMulticastGroup(universe);
+        var multicastGroup = e131Utils.getMulticastGroup(universe);
         self._socket.addMembership(multicastGroup, self.ip);
 
       });
