@@ -100,6 +100,8 @@ server.on('packet', function (packet) {
 });
 ```
 
+Universes to listen for can be added and droppped at any time by calling `addUniverse(universes)` or `dropUniverse(universes)`, respectively. The argument for these methods is an array of universe numbers.
+
 ## E1.31 (sACN) Packet Class
 
 The E1.31 Packet class contains a number of useful setter methods:
