@@ -62,7 +62,11 @@ var e131 = require('e131');
 var server = new e131.Server([universes], [port]);
 ```
 
-The `universes` argument can be an array (for joining multiple universes) or a single integer for joining a single universe. If `universes` is omitted, a single value of `1` is assumed. If `port` is omitted, the default E1.31 port `5568` is used.
+The `universes` argument can be an array (for joining multiple universes) or a single integer for joining a single universe. If `universes` is omitted, a single value of `1` is assumed.
+
+> **Note:** This library only uses one UDP socket and there is a maximum limit of 20 multicast memberships (universes) per single UDP socket. See issue #17 for more details.
+
+If `port` is omitted, the default E1.31 port `5568` is used.
 The server will join the corresponding Multicast groups for each provided universe automatically and starts listening as soon as it is created.
 The server performs basic out-of-order detection on received packets. If an out-of-order packet is received, it is discarded.
 
